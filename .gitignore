@@ -1,0 +1,6 @@
+node_modules/
+dist/
+com.mtbhuskies.herdr-deck.sdPlugin/bin/
+com.mtbhuskies.herdr-deck.sdPlugin/logs/
+.superpowers/
+logs/

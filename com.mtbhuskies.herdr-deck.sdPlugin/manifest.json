@@ -1,0 +1,135 @@
+{
+	"$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+	"Name": "Herdr Deck",
+	"Version": "0.1.0.0",
+	"Author": "mtbhuskies",
+	"Description": "Herdr agents as status-coloured keys, with dials for agents, pages, attention and tabs.",
+	"UUID": "com.mtbhuskies.herdr-deck",
+	"Icon": "imgs/plugin/icon",
+	"Category": "Herdr Deck",
+	"CategoryIcon": "imgs/plugin/category",
+	"CodePath": "bin/plugin.js",
+	"PropertyInspectorPath": "ui/settings.html",
+	"Profiles": [
+		{
+			"Name": "profiles/herdr-deck",
+			"DeviceType": 7
+		}
+	],
+	"SDKVersion": 2,
+	"Software": {
+		"MinimumVersion": "7.1"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "12"
+		}
+	],
+	"Nodejs": {
+		"Version": "20",
+		"Debug": "enabled"
+	},
+	"Actions": [
+		{
+			"UUID": "com.mtbhuskies.herdr-deck.agent",
+			"Name": "Agent",
+			"Tooltip": "One Herdr agent, coloured by status. Press to go to it.",
+			"Icon": "imgs/actions/agent",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/agent"
+				}
+			]
+		},
+		{
+			"UUID": "com.mtbhuskies.herdr-deck.agents",
+			"Name": "Agents",
+			"Tooltip": "Turn to switch agents. Herdr and Terminal follow when you stop turning.",
+			"Icon": "imgs/actions/agents",
+			"Controllers": [
+				"Encoder"
+			],
+			"Encoder": {
+				"layout": "layouts/strip.json",
+				"TriggerDescription": {
+					"Rotate": "Switch agent",
+					"Push": "Go to agent",
+					"Touch": "Go to agent"
+				}
+			},
+			"States": [
+				{
+					"Image": "imgs/actions/agents"
+				}
+			]
+		},
+		{
+			"UUID": "com.mtbhuskies.herdr-deck.pages",
+			"Name": "Pages",
+			"Tooltip": "Turn to flip pages of 8 agents. Press for page 1.",
+			"Icon": "imgs/actions/pages",
+			"Controllers": [
+				"Encoder"
+			],
+			"Encoder": {
+				"layout": "layouts/strip.json",
+				"TriggerDescription": {
+					"Rotate": "Flip page",
+					"Push": "Page 1"
+				}
+			},
+			"States": [
+				{
+					"Image": "imgs/actions/pages"
+				}
+			]
+		},
+		{
+			"UUID": "com.mtbhuskies.herdr-deck.attention",
+			"Name": "Needs you",
+			"Tooltip": "Press to jump to the agent that most needs you.",
+			"Icon": "imgs/actions/attention",
+			"Controllers": [
+				"Encoder"
+			],
+			"Encoder": {
+				"layout": "layouts/strip.json",
+				"TriggerDescription": {
+					"Rotate": "Step through agents needing you",
+					"Push": "Go to the most urgent",
+					"Touch": "Go to the most urgent"
+				}
+			},
+			"States": [
+				{
+					"Image": "imgs/actions/attention"
+				}
+			]
+		},
+		{
+			"UUID": "com.mtbhuskies.herdr-deck.tabs",
+			"Name": "Tabs",
+			"Tooltip": "Turn to cycle Herdr tabs. Press to bring Terminal forward.",
+			"Icon": "imgs/actions/tabs",
+			"Controllers": [
+				"Encoder"
+			],
+			"Encoder": {
+				"layout": "layouts/strip.json",
+				"TriggerDescription": {
+					"Rotate": "Cycle tabs",
+					"Push": "Bring Terminal forward"
+				}
+			},
+			"States": [
+				{
+					"Image": "imgs/actions/tabs"
+				}
+			]
+		}
+	]
+}

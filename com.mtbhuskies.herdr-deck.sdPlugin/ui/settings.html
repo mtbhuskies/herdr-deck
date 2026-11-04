@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+	body { margin: 0; padding: 10px 12px; background: #2d2d2d; color: #d8d8d8; font: 12px -apple-system, Helvetica, sans-serif; }
+	label { display: block; margin: 10px 0 4px; color: #9a9a9a; }
+	input { box-sizing: border-box; width: 100%; padding: 5px 6px; border: 1px solid #3d3d3d; border-radius: 3px; background: #3d3d3d; color: #d8d8d8; font: inherit; }
+	input:focus { outline: 1px solid #4f8bdc; }
+	p { margin: 12px 0 0; color: #8a8a8a; line-height: 1.4; }
+</style>
+</head>
+<body>
+	<label for="socketPath">Herdr socket</label>
+	<input id="socketPath" placeholder="~/.config/herdr/herdr.sock" spellcheck="false">
+	<label for="terminalBundleId">Terminal app (bundle id)</label>
+	<input id="terminalBundleId" placeholder="com.apple.Terminal" spellcheck="false">
+	<label for="launchCommand">Launch command</label>
+	<input id="launchCommand" placeholder="herdr --remote user@server" spellcheck="false">
+	<p>When no Terminal window is running Herdr, a key press opens one and runs the launch command. Leave it empty to only bring Terminal forward. Terminal.app only.</p>
+	<p>These apply to every Herdr Deck key and dial. For a tunnelled Herdr, use the local end of the tunnel, such as ~/.herdr-remote.sock.</p>
+<script>
+	// The Stream Deck app calls this with the port and ids for this inspector.
+	// Settings are global, so every key and dial shares the one set.
+	function connectElgatoStreamDeckSocket(port, uuid, registerEvent) {
+		const ws = new WebSocket("ws://127.0.0.1:" + port);
+		const fields = ["socketPath", "terminalBundleId", "launchCommand"];
+		let settings = {};
+		const send = (event, payload) => ws.send(JSON.stringify({ event, context: uuid, payload }));
+
+		ws.onopen = () => {
+			ws.send(JSON.stringify({ event: registerEvent, uuid }));
+			send("getGlobalSettings");
+		};
+		ws.onmessage = (message) => {
+			const data = JSON.parse(message.data);
+			if (data.event !== "didReceiveGlobalSettings") return;
+			settings = data.payload.settings || {};
+			for (const id of fields) document.getElementById(id).value = settings[id] || "";
+		};
+		for (const id of fields) {
+			document.getElementById(id).addEventListener("change", (e) => {
+				settings = { ...settings, [id]: e.target.value.trim() };
+				send("setGlobalSettings", settings);
+			});
+		}
+	}
+</script>
+</body>
+</html>

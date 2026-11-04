@@ -1,0 +1,35 @@
+name: release
+
+# Every push to main publishes the installable plugin as the `latest` release,
+# so the Mac only ever needs `gh release download`.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm run validate
+      - run: npm run pack
+      - run: npm run smoke
+      - name: Publish the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest dist/com.mtbhuskies.herdr-deck.streamDeckPlugin \
+            --title "Herdr Deck (latest)" \
+            --notes "Built from ${GITHUB_SHA::7}. Double-click the .streamDeckPlugin file to install."
